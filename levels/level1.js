@@ -188,6 +188,10 @@
     {
     }
 
+    function nextLevel(game)
+    {
+        game.nextLevel("2up.js");
+    }
 
     function loadState(game, state)
     {
@@ -604,6 +608,17 @@
                 killing: true,
             },
                 
+            {
+                position: { x: 270, y: -300 },
+                killing: true,
+                shape: new Line(0, 0, 0, 300),
+            },
+
+            {
+                position: { x: 350, y: -300 },
+                shape: new Line(0, 0, 0, 300),
+                trigger: nextLevel,
+            },
 
 
         ],
