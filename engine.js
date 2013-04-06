@@ -100,6 +100,17 @@ function GameEngine()
 
     this.levelFile = this.storage.getItem(STORAGE_LEVEL);
 
+    var self = this;
+    
+    document.getElementById("reset_save").addEventListener("click", 
+        function()
+        {
+            self.levelFile = FIRST_LEVEL;
+            self.storage.removeItem(STORAGE_STATE);
+            self.loadLevel(FIRST_LEVEL);
+        }, false);
+
+
     if(!this.levelFile)
     {
         this.levelFile = FIRST_LEVEL;
