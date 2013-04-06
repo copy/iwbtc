@@ -149,25 +149,37 @@
 
     function redOrb(game)
     {
-        game.addObject({
+        var f = game.addObject({
             tickFunction: shake,
         });
+
+        f.timer = 0;
 
         game.removeObject(this);
     }
 
     function shake(game)
     {
-        if(game.tickCount % 3)
+        if(this.timer % 4 === 2)
         {
-            if(game.tickCount % 2)
-            {
-                game.viewportY -= 2;
-            }
-            else
-            {
-                game.viewportY += 2;
-            }
+            game.viewportY -= 2;
+        }
+        else if(this.timer % 4 === 0)
+        {
+            game.viewportY += 2;
+        }
+
+        if(this.timer % 10 === 0)
+        {
+            game.objectMap["exitBlock"].y--;
+            game.objectMap["exitSpike"].y--;
+        }
+
+        this.timer++;
+        
+        if(this.timer > 1000)
+        {
+            game.removeObject(this);
         }
     }
 
@@ -421,7 +433,8 @@
                     { x: 206, y: 550 },
                     { x: 32, y: 500 },
                     { x: 32, y: 384 },
-                    { x: range(32, 800, 32), y: 0 },
+                    { x: range(32, 320, 32), y: 0 },
+                    { x: range(352, 800, 32), y: 0 },
 
                     { x: 309, y: 102 },
                 ],
@@ -455,7 +468,9 @@
                 killing: true,
                 position: [
                     { x: range(128, 734, 32), y: 416 },
-                    { x: range(32, 736, 32), y: 32 },
+
+                    { x: range(32, 320, 32), y: 32 },
+                    { x: range(352, 736, 32), y: 32 },
                 ]
             },
             {
@@ -574,7 +589,21 @@
                 trigger: saveState1,
                 position: { x: 40, y: 360 },
                 image: "blueOrb",
-            }
+            },
+
+            {
+                id: "exitBlock",
+                position: { x: 320, y: 0 },
+                image: 3,
+            },
+
+            {
+                id: "exitSpike",
+                position: { x: 320, y: 32 },
+                image: "spikeDown",
+                killing: true,
+            },
+                
 
 
         ],
