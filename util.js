@@ -27,7 +27,7 @@ Math.triangle = function(a)
     {
         return -1 + 4 * Math.abs(t/a + .25 - Math.floor(t/a + .75));
     }
-}
+};
 
 /**
  * Return a rectangle wave function between -1 and 1 (can also yield 0) with the
@@ -41,7 +41,13 @@ Math.rectangle = function(a)
     {
         return Math.sign(triangle(t));
     };
-}
+};
+
+// return 1 if x > y, -1 if y > x, 0 otherwise
+Math.compare = function(x, y)
+{
+    return Math.sign(x - y);
+};
 
 /**
  * index, n.:
@@ -113,7 +119,7 @@ Array.prototype.deleteList = function(xs)
     });
 };
 
-function replicate(n, x)
+Array.replicate = function(n, x)
 {
     var xs = [];
 
@@ -152,13 +158,8 @@ Array.toArray = function(xs)
     return [].slice.call(xs);
 };
 
-// return 1 if x > y, -1 if y > x, 0 otherwise
-function compare(x, y)
-{
-    return Math.sign(x - y);
-}
 
-function byIndex(index, value)
+Function.byIndex = function(index, value)
 {
     return function(obj)
     {
@@ -166,12 +167,12 @@ function byIndex(index, value)
     };
 }
 
-function isArray(x)
+Object.isArray = function(x)
 {
     return x instanceof Array;
 }
 
-function notF(f)
+Function.not = function(f)
 {
     return function(x) { return !f(x); };
 }
@@ -202,7 +203,7 @@ function range(min, max, step)
 /**
  * Hook obj[name], so when it gets called, func will get called too
  */
-function hook(obj, name, func)
+Function.hook = function(obj, name, func)
 {
     var old = obj[name];
 
@@ -329,7 +330,7 @@ function http_get(url, onready, onerror)
 // each product
 function cartesianProductOnObjects(list, keys)
 {
-    if(!isArray(list))
+    if(!Object.isArray(list))
     {
         list = [list];
     }
@@ -342,7 +343,7 @@ function cartesianProductOnObjects(list, keys)
         {
             var values = obj[key];
 
-            if(!isArray(values))
+            if(!Object.isArray(values))
             {
                 return [obj];
             }

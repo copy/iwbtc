@@ -63,7 +63,7 @@ Object.deepcopy = function clone(parent) {
           // Add to list of all parent objects
           circularParent[context] = parent;
           // Now continue cloning...
-          if (isArray(parent)) {
+          if (Object.isArray(parent)) {
               child = [];
               for(i in parent)
                   child[i] = _clone(parent[i], context + '[' + i + ']', child, i);

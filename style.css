@@ -8,7 +8,6 @@ canvas {
 body {
     font-family: sans-serif;
     background-color: #eee;
-    -background-image: url(paper.png);
 }
 #editor {
     width: 440px;

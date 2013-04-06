@@ -45,7 +45,7 @@ AudioManager.prototype.play = function(file, loop, once, volume, startTime)
         return;
     }
 
-    var existing = this.playing.filter(byIndex("file", file)),
+    var existing = this.playing.filter(Function.byIndex("file", file)),
         audioObject = existing.find(playable),
         audio;
 
@@ -122,7 +122,7 @@ AudioManager.prototype.preload = function(file, onload, onerror)
 
     if(this.works && !this.muted)
     {
-        var existing = this.playing.find(byIndex("file", file));
+        var existing = this.playing.find(Function.byIndex("file", file));
 
         if(existing)
         {
@@ -166,7 +166,7 @@ AudioManager.prototype.stop = function(file)
 {
     if(this.works)
     {
-        var audioObjs = this.playing.filter(byIndex("file", file));
+        var audioObjs = this.playing.filter(Function.byIndex("file", file));
 
         audioObjs.forEach(stop);
     }
