@@ -89,6 +89,7 @@ function GameEngine()
     this.drawableObjects = null;
 
     this.running = null;
+    this.tickFunctionStopped = true;
 
     // is the character moving, used for animating
     this.isMoving = null;
@@ -121,6 +122,11 @@ function GameEngine()
 
 }
 
+GameEngine.prototype.nextLevel = function(file)
+{
+    this.loadLevel(file);
+};
+
 GameEngine.prototype.loadLevel = function(file)
 {
     var self = this;
@@ -152,9 +158,10 @@ GameEngine.prototype.start = function()
     // everything else is initialized there:
     this.restart();
 
-    if(!this.running)
+    this.running = true;
+
+    if(this.tickFunctionStopped)
     {
-        this.running = true;
         this.doTick(this);
     }
 };
@@ -449,8 +456,11 @@ GameEngine.prototype.initLevel = function(level)
 
 GameEngine.prototype.doTick = function doTick(self)
 {
+    self.tickFunctionStopped = false;
+
     if(!self.running)
     {
+        self.tickFunctionStopped = true;
         return;
     }
 

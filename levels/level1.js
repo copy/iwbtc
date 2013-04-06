@@ -191,6 +191,8 @@
     function nextLevel(game)
     {
         game.nextLevel("2up.js");
+
+        game.removeObject(this);
     }
 
     function loadState(game, state)
