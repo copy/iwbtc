@@ -199,3 +199,15 @@ GameRenderer.prototype.redraw = function()
     //document.getElementById("fps").textContent = Math.round(1000 / delta) + "fps";
 
 };
+
+GameRenderer.prototype.drawLoadingScreen = function()
+{
+    this.context.fillStyle = "#000";
+    this.context.fillRect(0, 0, this.game.width, this.game.height);
+
+    this.context.fillStyle = "#fff";
+    this.context.font = "20px monospace";
+    this.context.textAlign = "center";
+    this.context.fillText("Loading resources. Please wait ...", this.game.width >> 1, 100);
+
+};

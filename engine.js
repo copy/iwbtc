@@ -88,6 +88,7 @@ function GameEngine()
     this.blockingObjects = null;
     this.drawableObjects = null;
 
+    this.running = null;
 
     // is the character moving, used for animating
     this.isMoving = null;
@@ -123,6 +124,9 @@ function GameEngine()
 GameEngine.prototype.loadLevel = function(file)
 {
     var self = this;
+
+    this.running = false;
+    this.renderer.drawLoadingScreen();
 
     http_get(LEVEL_DIR + file + "?" + Math.random(), function(result)
     {
@@ -445,6 +449,11 @@ GameEngine.prototype.initLevel = function(level)
 
 GameEngine.prototype.doTick = function doTick(self)
 {
+    if(!self.running)
+    {
+        return;
+    }
+
     var level = self.level,
         now = Date.now(),
         delta = now - self.lastTick;
