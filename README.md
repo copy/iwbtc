@@ -1,7 +1,8 @@
-I Wanna Be Thy Copy =
-
-Thy Copy : Thy Game
+I Wanna Be Thy Copy
 -
+
+**Thy Copy : Thy Game**
+
 
 I Wanna Be Thy Copy is yet another I Wanna Be The Guy fangame, written in
 JavaScript.
@@ -15,4 +16,4 @@ point, I'll add it later.
 
 
 <br>
-vim: set tw=80
+vim: set tw=80:
