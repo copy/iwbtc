@@ -1,0 +1,49 @@
+canvas {
+    border: 1px solid #000000;
+}
+#wrapper {
+    display: table;
+    margin: 0 auto;
+}
+body {
+    font-family: sans-serif;
+    background-color: #eee;
+    -background-image: url(paper.png);
+}
+#editor {
+    width: 440px;
+    height: 596px;
+    margin-left: 3px;
+    padding: 3px;
+}
+@media screen and (min-width: 1900px) {
+    #editor {
+        width: 700px;
+    }
+}
+
+#save {
+    float: right;
+}
+
+.link_like {
+    cursor: pointer;
+    font-size: small;
+}
+
+.link_like:hover {
+    color: green;
+}
+
+#keys {
+    min-height: 110px;
+    margin-left: 50px;
+    margin-top: 10px;
+}
+
+
+#press_key_msg {
+    height: 70px;
+    padding-top: 50px;
+    margin-left: 50px;
+}
