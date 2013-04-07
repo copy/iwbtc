@@ -11,7 +11,7 @@ You can play it online at http://copy.sh/iw/.
 
 <br>
 
-The original resource folder is not in this repositor yet. It's too big at this
+The original resource folder is not in this repository yet. It's too big at this
 point, I'll add it later.
 
 
