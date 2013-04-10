@@ -271,7 +271,6 @@ GameEngine.prototype.addObject = function(object)
     {
         console.log(Object.keys(object).deleteList(knownProperties));
         dbg_assert(false, "Unkown properties");
-
     }
 
     if(object.image)
@@ -285,7 +284,8 @@ GameEngine.prototype.addObject = function(object)
         }
     }
 
-    dbg_assert(!object.blocking || !trigger, "an object cannot block and have a trigger at the same time");
+    dbg_assert(!object.blocking || !trigger, 
+            "an object cannot block and have a trigger at the same time");
 
     if(object.killing)
     {
@@ -312,6 +312,7 @@ GameEngine.prototype.addObject = function(object)
         bitmap: bitmap, // may be undefined
         trigger: trigger, // may be undefined
         zIndex: object.zIndex || 0,
+        retrigger: !!object.retrigger,
         tickFunction: object.tickFunction, // may be undefined
     };
 
@@ -512,10 +513,14 @@ GameEngine.prototype.tick = function(self)
     {
         if(obj.bitmap && obj.trigger)
         {
-            if(self.characterCollision(obj.bitmap, obj.x, obj.y))
+            var hit = self.characterCollision(obj.bitmap, obj.x, obj.y);
+
+            if(hit && (obj.retrigger || !obj.triggered))
             {
                 obj.trigger.call(obj, self);
             }
+
+            obj.triggered = hit;
         }
     }
 
