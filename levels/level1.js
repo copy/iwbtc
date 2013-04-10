@@ -277,6 +277,8 @@
             3: "5.png",
             "apple": "269.png",
 
+            "gradient": "down_gradient_black.png",
+
 
             "charR1": "1.png",
             "charR2": "2.png",
@@ -444,6 +446,11 @@
 
                     { x: 309, y: 102 },
                 ],
+            },
+
+            {
+                image: "gradient",
+                position: { x: 320, y: 0 },
             },
 
             {
@@ -617,7 +624,7 @@
             },
 
             {
-                position: { x: 350, y: -300 },
+                position: { x: 500, y: -300 },
                 shape: new Line(0, 0, 0, 300),
                 trigger: nextLevel,
             },
