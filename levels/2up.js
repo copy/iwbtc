@@ -344,7 +344,7 @@
 
             {
                 position: { x: 0, y: 480 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike1"),
             },
 
@@ -359,7 +359,7 @@
 
             {
                 position: { x: 0, y: 470 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike2"),
             },
 
@@ -374,7 +374,7 @@
 
             {
                 position: { x: 0, y: 490 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike3"),
             },
 
@@ -388,7 +388,7 @@
 
             {
                 position: { x: 0, y: 550 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike4"),
             },
 
@@ -413,7 +413,7 @@
 
             {
                 position: { x: 0, y: 550 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike10"),
             },
 
@@ -427,8 +427,15 @@
 
             {
                 position: { x: 0, y: 480 },
-                shape: new Line(0, 0, 300, 0),
+                shape: new Rectangle(300, 5),
                 trigger: startObject("spike11"),
+            },
+
+            {
+                position: { x: 199, y: 580 },
+                shape: new Rectangle(20, 20),
+                retrigger: true,
+                trigger: function() { console.log("test"); },
             },
 
 
