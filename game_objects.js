@@ -60,26 +60,31 @@ Line.prototype.getBitmap = function()
 };
 
 /** @constructor */
-function Rectangle(x1, y1, x2, y2)
+function Rectangle(width, height)
 {
-    this.width = x2 - x1;
-    this.height = y2 - y1;
+    this.width = width;
+    this.height = height;
     
-    //this.p1 = { x: x1, y: y1 };
-    //this.p2 = { x: x2, y: y2 };
-
-    this.l1 = new Line(x1, y1, x2, y1);
-    this.l2 = new Line(x2, y1, x2, y2);
-    this.l3 = new Line(x2, y2, x1, y2);
-    this.l4 = new Line(x1, y2, x1, y1);
-
     this.bitmap = null;
 }
 
 
 Rectangle.prototype.getBitmap = function()
 {
-    dbg_assert(0, "TODO");
+    if(this.bitmap)
+    {
+        return this.bitmap;
+    }
+
+    this.bitmap = new Bitmap(this.width, this.height);
+
+    for(var i = 0; i < bitmap.count; i++)
+    {
+        this.bitmap.data[i] = 1;
+
+    }
+
+    return this.bitmap;
 };
 
 
