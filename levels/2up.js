@@ -33,7 +33,7 @@
     {
         if(state === 0xbaffbeff)
         {
-            throw "todo";
+            //throw "todo";
         }
         else
         {
@@ -45,8 +45,96 @@
     {
         game.saveState(0xbaffbeff);
         game.removeObject(this);
+    }
 
-        game.audio.play("Mega_Man_Beam_Sound.ogg", false, false);
+    function startPlatform(game)
+    {
+        if(!game.dead)
+        {
+            var p = game.objectMap["movingPlatform"]; 
+            p.forward = true;
+            p.backward = false;
+        }
+    }
+
+    function movePlatform(game)
+    {
+        if(this.backward)
+        {
+            if(this.y < 310)
+            {
+                this.backward = false;
+                this.forward = false;
+            }
+            else
+            {
+                game.moveObjectDown(this, -1);
+            }
+        }
+
+        if(this.forward)
+        {
+            if(this.y > 588)
+            {
+                this.backward = true;
+                this.forward = false;
+            }
+            else
+            {
+                game.moveObjectDown(this, 4);
+            }
+        }
+    }
+
+    function moveSpike(length, speed)
+    {
+        return function(game)
+        {
+            if(this.start === undefined)
+            {
+                this.start = this.x;
+            }
+
+            if(this.backward)
+            {
+                if(this.x === this.start)
+                {
+                    this.backward = false;
+                    this.forward = false;
+                }
+                else
+                {
+                    this.x -= speed;
+                }
+            }
+
+            if(this.forward)
+            {
+                if(Math.abs(this.x - this.start) >= length)
+                {
+                    this.backward = true;
+                    this.forward = false;
+                }
+                else
+                {
+                    this.x += speed;
+                }
+            }
+        }
+    }
+
+    function startObject(id)
+    {
+        return function(game)
+        {
+            if(!game.dead)
+            {
+                var obj = game.objectMap[id];
+
+                obj.forward = true;
+                obj.backward = false;
+            }
+        };
     }
 
     function tickFunction(game)
@@ -59,7 +147,7 @@
         resourceDir: "res/original/",
         musicDir : "res/music/",
 
-        startPosition: { x: 37, y: 200 },
+        startPosition: { x: 3, y: 575 },
         startViewport: { x: 0, y: 0 },
 
         width: 2400,
@@ -91,14 +179,18 @@
         },
 
 
-        backgroundColor : "#111",
+        backgroundColor : "#211",
 
         images : {
             "gameOver" : "309.png",
-            1: "338.png",
-            3: "5.png",
-            "apple": "269.png",
 
+            "platform" : "black_platform.png",
+            "wall": "1686.png",
+
+            "spikesLeft": "spikes_left.png",
+            "spikesRight": "spikes_right.png",
+
+            "yellowGradient": "left_gradient_yellow.png",
 
             "charR1": "1.png",
             "charR2": "2.png",
@@ -138,8 +230,6 @@
             "spikeRight": "162.png",
             "spikeDown": "164.png",
 
-            "platform": "259.png",
-            "platform2": "341.png",
 
             "jumpOrb": "844.png",
             "redOrb": "red_orb.png",
@@ -181,10 +271,167 @@
         objects : [
 
             {
-                position: { x: 0, y: 600 },
-                shape: new Line(0, 0, 800, 0),
                 blocking: true,
-            }
+                image: "wall",
+                position: [
+                    { x: 0, y: range(184, 568, 32) },
+                    { x: 280, y: range(184, 600, 32) },
+
+                ]
+            },
+
+            {
+                image: "yellowGradient",
+                position: { x: 0, y: 568 },
+            },
+
+            {
+                position: { x: -200, y: 600 },
+                shape: new Line(0, 0, 1000, 0),
+                blocking: true,
+            },
+
+            {
+                position: { x: -150, y: 400 },
+                shape: new Line(0, 0, 0, 400),
+                killing: true,
+            },
+
+
+            {
+                id: "saveState1",
+                position: { x: 166, y: 587 },
+                trigger: saveState1,
+                shape: new Line(0,0,1,0),
+            },
+
+            {
+                id: "movingPlatform",
+                position: { x: 140, y: 430 },
+                image: "platform",
+                tickFunction: movePlatform,
+                blocking: true,
+            },
+
+            {
+                position: [
+                    { x: 140, y: 599 },
+                    { x: 140, y: 290 },
+                ],
+                shape: new Line(0, 0, 32, 0),
+                trigger: startObject("movingPlatform"),
+            },
+
+
+            // spikes on the left
+            {
+                position: [
+                    { x: 270, y: 184 },
+                    { x: 270, y: 568 },
+                    { x: 270, y: 536 },
+                ],
+                image: "spikesLeft",
+                killing: true,
+            },
+
+            {
+                position: { x: 270, y: 408 },
+                image: "spikesLeft",
+                id: "spike1",
+                killing: true,
+                tickFunction: moveSpike(130, -3),
+            },
+
+            {
+                position: { x: 0, y: 480 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike1"),
+            },
+
+
+            {
+                position: { x: 270, y: 440 },
+                image: "spikesLeft",
+                id: "spike2",
+                killing: true,
+                tickFunction: moveSpike(130, -3),
+            },
+
+            {
+                position: { x: 0, y: 470 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike2"),
+            },
+
+
+            {
+                position: { x: 270, y: 472 },
+                image: "spikesLeft",
+                id: "spike3",
+                killing: true,
+                tickFunction: moveSpike(130, -2),
+            },
+
+            {
+                position: { x: 0, y: 490 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike3"),
+            },
+
+            {
+                position: { x: 270, y: 504 },
+                image: "spikesLeft",
+                id: "spike4",
+                killing: true,
+                tickFunction: moveSpike(130, -3),
+            },
+
+            {
+                position: { x: 0, y: 550 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike4"),
+            },
+
+            // spikes on the right
+            {
+                position: [
+                    { x: 32, y: 536 },
+                    { x: 32, y: 504 },
+                    { x: 32, y: 440 },
+                ],
+                image: "spikesRight",
+                killing: true,
+            },
+
+            {
+                position: { x: 32, y: 472 },
+                image: "spikesRight",
+                id: "spike10",
+                killing: true,
+                tickFunction: moveSpike(130, 3),
+            },
+
+            {
+                position: { x: 0, y: 550 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike10"),
+            },
+
+            {
+                position: { x: 32, y: 408 },
+                image: "spikesRight",
+                id: "spike11",
+                killing: true,
+                tickFunction: moveSpike(90, 5),
+            },
+
+            {
+                position: { x: 0, y: 480 },
+                shape: new Line(0, 0, 300, 0),
+                trigger: startObject("spike11"),
+            },
+
+
         ],
     };
 
