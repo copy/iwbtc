@@ -78,10 +78,9 @@ Rectangle.prototype.getBitmap = function()
 
     this.bitmap = new Bitmap(this.width, this.height);
 
-    for(var i = 0; i < bitmap.count; i++)
+    for(var i = 0; i < this.bitmap.count; i++)
     {
         this.bitmap.data[i] = 1;
-
     }
 
     return this.bitmap;
