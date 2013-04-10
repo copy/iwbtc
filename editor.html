@@ -2,6 +2,7 @@
 <meta charset="utf-8"> 
 <title>I Wanna Be Thy Copy</title>
 
+<script src="editor.js"></script>
 <script src="storage.js"></script>
 <script src="clone.js"></script>
 <script src="keyboard.js"></script>
@@ -15,18 +16,18 @@
 <link rel="stylesheet" href="style.css">
 
 <div id="wrapper">
-    <center>
-        <h1>I Wanna Be Thy Copy</h1>
-        <h3>Thy Copy : Thy Game</h3>
-        <canvas id="canvas">
-            <p>Your browser doesn't support canvas.</p>
-        </canvas>
-    </center>
+    <canvas id="canvas">
+        <p>Your browser doesn't support canvas.</p>
+    </canvas>
     <noscript>Your browser needs JavaScript to run this game.</noscript>
+    <textarea id="editor"></textarea>
     <hr>
+    <input type="checkbox" id="show_invisibles"> Show invisible elements
+    <button id="save">save</button>
     <pre id="debug"></pre>
+    <pre id="coords"></pre>
+    <pre id="fps"></pre>
     <pre id="warn"></pre>
-    Default keys (click to change):<br>
     <div id="keys">
         <span class="link_like" id="change_left">Left Arrow - Move left</span><br>
         <span class="link_like" id="change_right">Right Arrow - Move right</span><br>
@@ -42,15 +43,4 @@
     <span class="link_like" id="reset_keys">Click here to reset keys</span><br>
     <br>
     <span class="link_like" id="reset_save">Start again from the first level</span><br>
-
-
-    <br><br>
-    IWBTG was originally created by <a href=http://kayin.pyoko.org/>Kayin</a>, who shall 
-    be worshipped like Zeus himself for creating the best game ever. <br>
-    Props also go to Ellipsis and sam136 from the IWBTG forum for ripping 
-    the music and images from the original game.
-    <br>
-    <br>
-    Source code available on <a href=https://github.com/copy/iwbtc>github</a>.
 </div>
-
