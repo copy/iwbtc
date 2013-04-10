@@ -12,7 +12,7 @@ var NOT_FALLING = 0,
 var GAME_WIDTH = 800,
     GAME_HEIGHT = 600;
 
-var FIRST_LEVEL = "level1.js",
+var FIRST_LEVEL = "2up.js",
     LEVEL_DIR = "levels/";
 
 
@@ -752,12 +752,13 @@ GameEngine.prototype.moveObjectRight = function(object, x)
         }
         else if(this.characterCollision(object.bitmap, object.x, object.y))
         {
-            // push the character away
+            // push the character right or left
             if(this.moveCharacterRight(dx))
             {
                 // the character has been blocked by an object on the other side
                 // this should kill him
                 console.log("crushed");
+                this.die();
             }
         }
     }
@@ -768,7 +769,6 @@ GameEngine.prototype.moveObjectRight = function(object, x)
 // - The player is standing on the object -> move the character up with it
 GameEngine.prototype.moveObjectDown = function(object, y)
 {
-
     if(y >= 0)
     {
         var characterIsOntop = false;
@@ -781,12 +781,28 @@ GameEngine.prototype.moveObjectDown = function(object, y)
             characterIsOntop = true;
         }
 
-        // moving down is safe
-        object.y += y;
-
-        if(characterIsOntop)
+        while(y)
         {
-            this.moveCharacterDown(y);
+            object.y++;
+            y--;
+
+            if(characterIsOntop)
+            {
+                if(this.moveCharacterDown(1))
+                {
+                    // the object that the character is standing on
+                    // went through another object. Nothing has to
+                    // be done
+                }
+            }
+            else if(this.characterCollision(object.bitmap, object.x, object.y))
+            {
+                if(this.moveCharacterDown(1))
+                {
+                    console.log("crushed");
+                    this.die();
+                }
+            }
         }
     }
     else
@@ -804,6 +820,7 @@ GameEngine.prototype.moveObjectDown = function(object, y)
                     // the character has been blocked by an object on the other side
                     // this should kill him
                     console.log("crushed");
+                    this.die();
                 }
             }
         }
