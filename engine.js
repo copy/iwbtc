@@ -264,7 +264,7 @@ GameEngine.prototype.addObject = function(object)
         knownProperties = [
             "posX", "posY", "dynamic", "trigger", "image",
             "blocking", "killing", "id", "tickFunction",
-            "zIndex", "position", "shape",
+            "zIndex", "position", "shape", "retrigger",
         ];
 
     if(Object.keys(object).deleteList(knownProperties).length)

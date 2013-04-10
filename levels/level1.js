@@ -383,6 +383,12 @@
         //   yourself. If not set, nothing happens when the player is inside of the
         //   object
         //
+        // - retrigger: 
+        //   Boolean, optional, default false. If set to true, the trigger
+        //   function above will be called on every tick, as long as the
+        //   character is standing inside of the trigger.  Otherwise, it will
+        //   only be called once every time the character enters the trigger.
+        //
         // - shape:
         //   Optional if the object has an image. Determines where the object blocks
         //   the player or triggers functions. If left out, the shape is determined
