@@ -32,7 +32,7 @@ LevelEditor.prototype.redrawHook = function()
 
     if(this.showInvisibleElements)
     {
-        ctx.fillStyle = "#000";
+        ctx.fillStyle = "rgba(0, 0, 0, .5)";
 
         game.objects.forEach(function(obj)
         {
