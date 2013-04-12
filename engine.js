@@ -127,6 +127,8 @@ GameEngine.prototype.nextLevel = function(file)
     this.loadLevel(file);
 };
 
+// Step 1: Download the level file,
+//         call loadResources when done
 GameEngine.prototype.loadLevel = function(file)
 {
     var self = this;
@@ -145,10 +147,61 @@ GameEngine.prototype.loadLevel = function(file)
 
         self.level = level;
 
-        self.initLevel(level);
+        self.loadResources(level);
     });
 };
 
+// Step 2: Download images and audio files of the level
+//         Call start when done
+GameEngine.prototype.loadResources = function(level)
+{
+    var base = level.resourceDir,
+        imageIds = Object.keys(level.images),
+        fileCount = 0,
+        self = this;
+
+    this.audio.path = level.musicDir;
+
+    this.level = level;
+
+    this.audio.preload(this.level.jumpMusic1, fileLoaded(), loadFailed);
+    this.audio.preload(this.level.jumpMusic2, fileLoaded(), loadFailed);
+
+    imageIds.forEach(function(id)
+    {
+        var filename = level.images[id],
+            image = new Image();
+
+        self.images[id] = image;
+
+        image.onload = fileLoaded();
+        image.onerror = loadFailed;
+        image.src = base + filename;
+    });
+
+    function fileLoaded()
+    {
+        fileCount++;
+
+        return function()
+        {
+            fileCount--;
+
+            if(fileCount === 0)
+            {
+                self.start();
+            }
+        };
+    }
+
+    function loadFailed()
+    {
+        throw "loading a resource failed. Will not start";
+    }
+};
+
+
+// Step 3: Start the game
 GameEngine.prototype.start = function()
 {
     this.charBitmap = Bitmap.fromImage(this.images["charHitmap"]);
@@ -197,6 +250,8 @@ GameEngine.prototype.restart = function()
     {
         this.level.loadState(this, gameState);
     }
+
+    this.level.init(this);
 };
 
 GameEngine.prototype.saveState = function(state)
@@ -226,8 +281,8 @@ GameEngine.prototype.loadObjects = function()
         {
             var o = Object.deepcopy(obj);
 
-            o.posX = pos.x;
-            o.posY = pos.y;
+            o.x = pos.x;
+            o.y = pos.y;
 
             return o;
         });
@@ -236,10 +291,16 @@ GameEngine.prototype.loadObjects = function()
     objects.forEach(function(object)
     {
         var obj = self.addObject(object);
+
+        if(obj.init)
+        {
+            obj.init(self);
+        }
     });
 
 
-    var objectsByType = this.drawableObjects.partition(function(obj)
+    var objectsByType = this.drawableObjects.partition(
+        function(obj)
         {
             return obj.dynamic;
         });
@@ -262,9 +323,10 @@ GameEngine.prototype.addObject = function(object)
         height = undefined,
         bitmap = undefined,
         knownProperties = [
-            "posX", "posY", "dynamic", "trigger", "image",
+            "x", "y", "dynamic", "trigger", "image",
             "blocking", "killing", "id", "tickFunction",
             "zIndex", "position", "shape", "retrigger",
+            "init",
         ];
 
     if(Object.keys(object).deleteList(knownProperties).length)
@@ -302,8 +364,8 @@ GameEngine.prototype.addObject = function(object)
     }
 
     var newObject = { 
-        x: object.posX,
-        y: object.posY,
+        x: object.x,
+        y: object.y,
         width: width,
         height: height,
         dynamic: isDynamic,
@@ -314,6 +376,7 @@ GameEngine.prototype.addObject = function(object)
         zIndex: object.zIndex || 0,
         retrigger: !!object.retrigger,
         tickFunction: object.tickFunction, // may be undefined
+        init: object.init, // may be undefined
     };
 
 
@@ -404,53 +467,6 @@ GameEngine.prototype.crush = function()
 };
 
 
-
-GameEngine.prototype.initLevel = function(level)
-{
-    var base = level.resourceDir,
-        imageIds = Object.keys(level.images),
-        fileCount = 0,
-        self = this;
-
-    this.audio.path = level.musicDir;
-
-    this.level = level;
-
-    this.audio.preload(this.level.jumpMusic1, fileLoaded(), loadFailed);
-    this.audio.preload(this.level.jumpMusic2, fileLoaded(), loadFailed);
-
-    imageIds.forEach(function(id)
-    {
-        var filename = level.images[id],
-            image = new Image();
-
-        self.images[id] = image;
-
-        image.onload = fileLoaded();
-        image.onerror = loadFailed;
-        image.src = base + filename;
-    });
-
-    function fileLoaded()
-    {
-        fileCount++;
-
-        return function()
-        {
-            fileCount--;
-
-            if(fileCount === 0)
-            {
-                self.start();
-            }
-        };
-    }
-
-    function loadFailed()
-    {
-        throw "loading a resource failed. Will not start";
-    }
-};
 
 
 
