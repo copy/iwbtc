@@ -241,6 +241,8 @@
 
         loadState: loadState,
 
+        init: function(game) {},
+
         //physics : {
         //    jumpInitialSpeed : -1.5,
         //    jumpGravity : .015,
@@ -426,6 +428,9 @@
         // - tickFunction:
         //   Optional. A function that gets called on every tick of the game with
         //   this set as the object and the game as first parameter.
+        //
+        // - init:
+        //   Optional. A function that gets called once the game is (re-)started.
 
         objects : [
 
@@ -590,8 +595,7 @@
                 position: [
                     { x: [565, 485, 405, 325], y: 500 },
                     { x: [230, 300], y: 310 },
-                    { x: 340, y: 270 }, // hard mode:  y: 260
-                    { x: 369, y: 120 },
+                    { x: 340, y: 260 }, // hard mode:  y: 260
                 ],
             },
 
