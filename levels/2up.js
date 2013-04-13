@@ -47,41 +47,34 @@
         game.removeObject(this);
     }
 
-    function startPlatform(game)
-    {
-        if(!game.dead)
-        {
-            var p = game.objectMap["movingPlatform"]; 
-            p.forward = true;
-            p.backward = false;
-        }
-    }
-
     function movePlatform(game)
     {
         if(this.backward)
         {
-            if(this.y < 310)
+            if(this.y <= 300)
             {
                 this.backward = false;
-                this.forward = false;
+                this.forward = true;
             }
             else
             {
                 game.moveObjectDown(this, -1);
             }
         }
-
+        
         if(this.forward)
         {
-            if(this.y > 588)
+            game.moveObjectDown(this, 4);
+
+            if(this.y === 460)
+            {
+                this.backward = false;
+                this.forward = false;
+            }
+            else if(this.y > 588)
             {
                 this.backward = true;
                 this.forward = false;
-            }
-            else
-            {
-                game.moveObjectDown(this, 4);
             }
         }
     }
@@ -129,7 +122,7 @@
         {
             if(!game.dead)
             {
-                var obj = game.objectMap[id];
+                var obj = game.objectMap[id] || id;
 
                 obj.forward = true;
                 obj.backward = false;
@@ -141,6 +134,27 @@
     {
 
     }
+
+    // the spikes in the first part of the game
+    function MovingSpike(posX, posY, triggerY, moveLength, speed)
+    {
+        this.position = { x: posX, y: posY };
+        this.image = speed < 0 ? "spikesLeft" : "spikesRight";
+        this.killing = true;
+        this.tickFunction = moveSpike(moveLength, speed);
+        this.dynamic = true;
+
+        this.init = function(game)
+        {
+            game.addObject({
+                x: 0, 
+                y: triggerY,
+                shape: new Rectangle(300, 100),
+                trigger: startObject(this),
+            });
+        };
+    }
+
 
     return {
 
@@ -163,6 +177,8 @@
         jumpMusic2 : "jump2.ogg",
 
         loadState: loadState,
+
+        init : function(game) {},
 
 
         physics : {
@@ -316,7 +332,7 @@
             {
                 position: [
                     { x: 140, y: 599 },
-                    { x: 140, y: 290 },
+                    //{ x: 140, y: 290 },
                 ],
                 shape: new Line(0, 0, 32, 0),
                 trigger: startObject("movingPlatform"),
@@ -327,6 +343,7 @@
             {
                 position: [
                     { x: 270, y: 184 },
+                    { x: 270, y: 216 },
                     { x: 270, y: 568 },
                     { x: 270, y: 536 },
                 ],
@@ -334,67 +351,23 @@
                 killing: true,
             },
 
-            {
-                position: { x: 270, y: 408 },
-                image: "spikesLeft",
-                id: "spike1",
-                killing: true,
-                tickFunction: moveSpike(130, -3),
-            },
 
-            {
-                position: { x: 0, y: 480 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike1"),
-            },
+            new MovingSpike(270, 248, 210, 110, -1),
+            new MovingSpike(270, 280, 230, 110, -2),
+            new MovingSpike(270, 312, 240, 110, -3),
+            new MovingSpike(270, 344, 270, 70,  -1),
+            new MovingSpike(270, 376, 270, 130, -3),
+            new MovingSpike(270, 408, 380, 130, -3),
+            new MovingSpike(270, 440, 370, 130, -3),
+            new MovingSpike(270, 472, 390, 130, -2),
+            new MovingSpike(270, 504, 450, 130, -3),
 
-
-            {
-                position: { x: 270, y: 440 },
-                image: "spikesLeft",
-                id: "spike2",
-                killing: true,
-                tickFunction: moveSpike(130, -3),
-            },
-
-            {
-                position: { x: 0, y: 470 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike2"),
-            },
-
-
-            {
-                position: { x: 270, y: 472 },
-                image: "spikesLeft",
-                id: "spike3",
-                killing: true,
-                tickFunction: moveSpike(130, -2),
-            },
-
-            {
-                position: { x: 0, y: 490 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike3"),
-            },
-
-            {
-                position: { x: 270, y: 504 },
-                image: "spikesLeft",
-                id: "spike4",
-                killing: true,
-                tickFunction: moveSpike(130, -3),
-            },
-
-            {
-                position: { x: 0, y: 550 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike4"),
-            },
 
             // spikes on the right
             {
                 position: [
+                    { x: 32, y: 184 },
+                    { x: 32, y: 216 },
                     { x: 32, y: 536 },
                     { x: 32, y: 504 },
                     { x: 32, y: 440 },
@@ -403,41 +376,14 @@
                 killing: true,
             },
 
-            {
-                position: { x: 32, y: 472 },
-                image: "spikesRight",
-                id: "spike10",
-                killing: true,
-                tickFunction: moveSpike(130, 3),
-            },
 
-            {
-                position: { x: 0, y: 550 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike10"),
-            },
-
-            {
-                position: { x: 32, y: 408 },
-                image: "spikesRight",
-                id: "spike11",
-                killing: true,
-                tickFunction: moveSpike(90, 5),
-            },
-
-            {
-                position: { x: 0, y: 480 },
-                shape: new Rectangle(300, 5),
-                trigger: startObject("spike11"),
-            },
-
-            {
-                position: { x: 199, y: 580 },
-                shape: new Rectangle(20, 20),
-                retrigger: true,
-                trigger: function() { console.log("test"); },
-            },
-
+            new MovingSpike(32, 248, 310, 90,  3),
+            new MovingSpike(32, 280, 330, 140, 2),
+            new MovingSpike(32, 312, 330, 170, 1),
+            new MovingSpike(32, 344, 370, 70,  2),
+            new MovingSpike(32, 376, 340, 130, 2),
+            new MovingSpike(32, 408, 400, 90,  5),
+            new MovingSpike(32, 472, 450, 130, 3),
 
         ],
     };
