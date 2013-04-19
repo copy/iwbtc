@@ -15,6 +15,8 @@ function LevelEditor(game)
     this.game = game;
 
     Function.hook(game.renderer, "redraw", this.redrawHook.bind(this));
+    // TODO:
+    //game.addDrawHook(this.redrawHook.bind(this));
 
     game.renderer.canvas.addEventListener("mousemove", 
             this.updateCoords.bind(this), false);

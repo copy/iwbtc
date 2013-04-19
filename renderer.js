@@ -154,7 +154,7 @@ GameRenderer.prototype.redraw = function()
     }
 
 
-    drawCanvas(this.foregroundCanvas);
+    //drawCanvas(this.foregroundCanvas);
 
 
     game.drawableObjects.forEach(drawObject);
