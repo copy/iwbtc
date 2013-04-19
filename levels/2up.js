@@ -206,7 +206,9 @@
             "spikesLeft": "spikes_left.png",
             "spikesRight": "spikes_right.png",
 
-            "yellowGradient": "left_gradient_yellow.png",
+            "yellowGradientLeft": "left_gradient_yellow.png",
+            "yellowGradientRight": "right_gradient_yellow.png",
+            "yellowGradientTop": "top_gradient_yellow.png",
 
             "charR1": "1.png",
             "charR2": "2.png",
@@ -292,13 +294,29 @@
                 position: [
                     { x: 0, y: range(184, 568, 32) },
                     { x: 280, y: range(184, 600, 32) },
-
+                    { x: 352, y: range(184, 568, 32) },
+                    { x: range(384, 660, 32), y: 536 },
+                    { x: range(384, 660, 32), y: 504 },
+                    { x: 704, y: range(184, 600, 32) },
+                    { x: 768, y: range(184, 536, 32) },
+                    { x: 768, y: 568 },
                 ]
             },
 
+
             {
-                image: "yellowGradient",
+                image: "yellowGradientRight",
                 position: { x: 0, y: 568 },
+            },
+
+            {
+                image: "yellowGradientLeft",
+                position: { x: 768, y: 536 },
+            },
+
+            {
+                image: "yellowGradientTop",
+                position: { x: 736, y: 568 },
             },
 
             {
@@ -384,6 +402,20 @@
             new MovingSpike(32, 376, 340, 130, 2),
             new MovingSpike(32, 408, 400, 90,  5),
             new MovingSpike(32, 472, 450, 130, 3),
+
+            // tunnel
+            {
+                position: { x: 312, y: range(184, 600, 32) },
+                image: "spikesRight",
+                killing: true,
+            },
+            {
+                position: { x: 342, y: range(184, 568, 32) },
+                image: "spikesLeft",
+                killing: true,
+            },
+
+
 
         ],
     };

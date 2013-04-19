@@ -41,8 +41,6 @@ function GameEngine()
     this.width = GAME_WIDTH;
     this.height = GAME_HEIGHT;
 
-    window.ge = this;
-    
     this.storage = new GameStorage(this.version);
 
     if(!this.storage.works)

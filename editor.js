@@ -21,6 +21,9 @@ function LevelEditor(game)
 
     this.showInvisibles.addEventListener("change",
             this.setShowInvisibles.bind(this), false);
+
+    // debugging help
+    window.ge = game;   
 }
 
 LevelEditor.prototype.redrawHook = function()
