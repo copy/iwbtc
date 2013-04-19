@@ -98,6 +98,8 @@ function GameEngine()
     // information populated by the level scripter
     this.gameData = null;
 
+    this.drawHooks = null;
+
     this.levelFile = this.storage.getItem(STORAGE_LEVEL);
 
     var self = this;
@@ -239,6 +241,8 @@ GameEngine.prototype.restart = function()
     this.tickCount = 0;
 
     this.gameData = {};
+
+    this.drawHooks = [];
 
     this.loadObjects();
 
@@ -508,6 +512,11 @@ GameEngine.prototype.doTick = function doTick(self)
 
     self.renderer.redraw();
 
+    self.drawHooks.forEach(function(f)
+    {
+        f.call(self.level, self);
+    });
+
     requestAnimationFrame(function() { doTick(self); });
 };
 
@@ -673,6 +682,11 @@ GameEngine.prototype.tick = function(self)
 
     // debug
     //dbg_log(["NOT_FALLING", "IN_JUMP", "FALLING"][self.fallingState]);
+};
+
+GameEngine.prototype.addDrawHook = function(f)
+{
+    this.drawHooks.push(f);
 };
 
 
