@@ -3,22 +3,6 @@
 (function()
 {
 
-    function transitionUp(game)
-    {
-        if(game.viewportY === 600)
-        {
-            game.viewportY = 0;
-        }
-    }
-
-    function transitionDown(game)
-    {
-        if(game.viewportY === 0)
-        {
-            game.viewportY = 600;
-        }
-    }
-
     function additionalJump(game)
     {
         game.canJump = true;
@@ -132,7 +116,7 @@
 
     function tickFunction(game)
     {
-
+        game.viewportX = Math.max(0, game.posX) / 3 | 0;
     }
 
     // the spikes in the first part of the game
@@ -164,7 +148,7 @@
         startPosition: { x: 3, y: 575 },
         startViewport: { x: 0, y: 0 },
 
-        width: 2400,
+        width: 1200,
         height: 600,
 
         characterWidth : 25,
@@ -178,7 +162,35 @@
 
         loadState: loadState,
 
-        init : function(game) {},
+        init : function(game) 
+        {
+            var canvas = document.createElement("canvas"),
+                context;
+
+            canvas.width = game.width;
+            canvas.height = game.height;
+            context = canvas.getContext("2d");
+
+            game.addDrawHook(function(game)
+            {
+                return;
+                var renderer = game.renderer,
+                    x = game.posX + game.level.characterWidth / 2 | 0,
+                    y = game.posY + game.level.characterHeight / 2 | 0;
+
+                context.clearRect(0, 0, game.width, game.height);
+
+                var g = context.createRadialGradient(x, y, 0, x, y, 200);
+                g.addColorStop(1, 'rgba(0,0,0,.95)');
+                g.addColorStop(0, 'rgba(0,0,0,0)');
+
+                context.fillStyle = g;
+                context.fillRect(0, 0, game.width, game.height);
+
+                renderer.context.drawImage(canvas, 0, 0);
+            });
+        
+        },
 
 
         physics : {
@@ -205,6 +217,8 @@
 
             "spikesLeft": "spikes_left.png",
             "spikesRight": "spikes_right.png",
+            "spikesUp": "spikes_up.png",
+            "spikesDown": "spikes_down.png",
 
             "yellowGradientLeft": "left_gradient_yellow.png",
             "yellowGradientRight": "right_gradient_yellow.png",
@@ -295,11 +309,23 @@
                     { x: 0, y: range(184, 568, 32) },
                     { x: 280, y: range(184, 600, 32) },
                     { x: 352, y: range(184, 568, 32) },
-                    { x: range(384, 660, 32), y: 536 },
-                    { x: range(384, 660, 32), y: 504 },
+
                     { x: 704, y: range(184, 600, 32) },
                     { x: 768, y: range(184, 536, 32) },
                     { x: 768, y: 568 },
+
+                    { x: range(384, 660, 32), y: 536 },
+                    { x: range(384, 660, 32), y: 504 },
+
+                    { x: range(416, 692, 32), y: 440 },
+                    { x: range(416, 692, 32), y: 408 },
+
+                    { x: range(384, 660, 32), y: 346 },
+                    { x: range(384, 660, 32), y: 314 },
+
+                    { x: range(416, 692, 32), y: 250 },
+                    { x: range(384, 660, 32), y: 184 },
+
                 ]
             },
 
@@ -310,18 +336,14 @@
             },
 
             {
-                image: "yellowGradientLeft",
-                position: { x: 768, y: 536 },
-            },
-
-            {
-                image: "yellowGradientTop",
-                position: { x: 736, y: 568 },
+                image: "spikesUp",
+                position: { x: 736, y: 587 },
+                killing: true,
             },
 
             {
                 position: { x: -200, y: 600 },
-                shape: new Line(0, 0, 1000, 0),
+                shape: new Line(0, 0, 720, 0),
                 blocking: true,
             },
 
@@ -381,7 +403,6 @@
             new MovingSpike(270, 504, 450, 130, -3),
 
 
-            // spikes on the right
             {
                 position: [
                     { x: 32, y: 184 },
@@ -415,6 +436,12 @@
                 killing: true,
             },
 
+
+            {
+                position: { x: range(352, 660, 32), y: 171 },
+                image: "spikesUp",
+                killing: true,
+            },
 
 
         ],
