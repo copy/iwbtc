@@ -122,8 +122,14 @@ function GameEngine()
 
 }
 
+// called by level scripter
 GameEngine.prototype.nextLevel = function(file)
 {
+    // autosave, there is no way back
+    this.levelFile = file;
+    this.storage.setItem(STORAGE_LEVEL, file);
+    this.storage.removeItem(STORAGE_STATE);
+
     this.loadLevel(file);
 };
 
