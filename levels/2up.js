@@ -18,6 +18,9 @@
         if(state === 0xbaffbeff)
         {
             //throw "todo";
+            game.posX = 350;
+            game.posY = 577;
+            game.removeObjectById("saveState1");
         }
         else
         {
@@ -116,7 +119,7 @@
 
     function tickFunction(game)
     {
-        game.viewportX = Math.max(0, game.posX) / 3 | 0;
+        game.viewportX = Math.max(0, game.posX - 200) * .4 | 0;
     }
 
     // the spikes in the first part of the game
@@ -175,8 +178,8 @@
             {
                 return;
                 var renderer = game.renderer,
-                    x = game.posX + game.level.characterWidth / 2 | 0,
-                    y = game.posY + game.level.characterHeight / 2 | 0;
+                    x = game.posX + game.level.characterWidth / 2 - game.viewportX | 0,
+                    y = game.posY + game.level.characterHeight / 2 - game.viewportY | 0;
 
                 context.clearRect(0, 0, game.width, game.height);
 
@@ -314,14 +317,14 @@
                     { x: 768, y: range(184, 536, 32) },
                     { x: 768, y: 568 },
 
-                    { x: range(384, 660, 32), y: 536 },
+                    { x: range(448, 660, 32), y: 536 },
                     { x: range(384, 660, 32), y: 504 },
 
                     { x: range(416, 692, 32), y: 440 },
                     { x: range(416, 692, 32), y: 408 },
 
-                    { x: range(384, 660, 32), y: 346 },
                     { x: range(384, 660, 32), y: 314 },
+                    { x: range(384, 660, 32), y: 346 },
 
                     { x: range(416, 692, 32), y: 250 },
                     { x: range(384, 660, 32), y: 184 },
@@ -343,7 +346,7 @@
 
             {
                 position: { x: -200, y: 600 },
-                shape: new Line(0, 0, 720, 0),
+                shape: new Line(0, 0, 1400, 0),
                 blocking: true,
             },
 
@@ -356,9 +359,9 @@
 
             {
                 id: "saveState1",
-                position: { x: 166, y: 587 },
+                position: { x: 406, y: 550 },
+                image: "blueOrb",
                 trigger: saveState1,
-                shape: new Line(0,0,1,0),
             },
 
             {
@@ -439,6 +442,11 @@
 
             {
                 position: { x: range(352, 660, 32), y: 171 },
+                image: "spikesUp",
+                killing: true,
+            },
+            {
+                position: { x: 400, y: 588 },
                 image: "spikesUp",
                 killing: true,
             },
