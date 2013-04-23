@@ -140,7 +140,6 @@ GameEngine.prototype.loadLevel = function(file)
     var self = this;
 
     this.running = false;
-    this.renderer.drawLoadingScreen();
 
     http_get(LEVEL_DIR + file + "?" + Math.random(), function(result)
     {
@@ -164,11 +163,13 @@ GameEngine.prototype.loadResources = function(level)
     var base = level.resourceDir,
         imageIds = Object.keys(level.images),
         fileCount = 0,
+        filesLoaded = 0,
         self = this;
 
     this.audio.path = level.musicDir;
 
     this.level = level;
+
 
     this.audio.preload(this.level.jumpMusic1, fileLoaded(), loadFailed);
     this.audio.preload(this.level.jumpMusic2, fileLoaded(), loadFailed);
@@ -185,15 +186,18 @@ GameEngine.prototype.loadResources = function(level)
         image.src = base + filename;
     });
 
+    this.renderer.drawLoadingScreen(0, fileCount);
+
     function fileLoaded()
     {
         fileCount++;
 
         return function()
         {
-            fileCount--;
+            filesLoaded++;
+            self.renderer.drawLoadingScreen(filesLoaded, fileCount);
 
-            if(fileCount === 0)
+            if(fileCount === filesLoaded)
             {
                 self.start();
             }

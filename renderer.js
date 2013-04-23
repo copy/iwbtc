@@ -200,7 +200,7 @@ GameRenderer.prototype.redraw = function()
 
 };
 
-GameRenderer.prototype.drawLoadingScreen = function()
+GameRenderer.prototype.drawLoadingScreen = function(filesLoaded, fileCount)
 {
     this.context.fillStyle = "#000";
     this.context.fillRect(0, 0, this.game.width, this.game.height);
@@ -209,5 +209,6 @@ GameRenderer.prototype.drawLoadingScreen = function()
     this.context.font = "20px monospace";
     this.context.textAlign = "center";
     this.context.fillText("Loading resources. Please wait ...", this.game.width >> 1, 100);
+    this.context.fillText(filesLoaded + " out of " + fileCount, this.game.width >> 1, 140);
 
 };
