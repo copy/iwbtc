@@ -313,14 +313,17 @@
                     { x: 280, y: range(184, 600, 32) },
                     { x: 352, y: range(184, 568, 32) },
 
-                    { x: 704, y: range(184, 600, 32) },
+                    { x: 704, y: range(152, 600, 32) },
                     { x: 768, y: range(184, 536, 32) },
                     { x: 768, y: 568 },
 
-                    { x: range(448, 660, 32), y: 536 },
+                    { x: range(448, 608, 32), y: 536 },
+                    { x: 640, y: 536 },
                     { x: range(384, 660, 32), y: 504 },
 
-                    { x: range(416, 692, 32), y: 440 },
+                    { x: range(416, 480, 32), y: 440 },
+                    { x: range(608, 692, 32), y: 440 },
+
                     { x: range(416, 692, 32), y: 408 },
 
                     { x: range(384, 660, 32), y: 314 },
@@ -340,7 +343,46 @@
 
             {
                 image: "spikesUp",
-                position: { x: 736, y: 587 },
+                position: [
+                    { x: 736, y: 587 },
+                    { x: 704, y: 140 },
+                    { x: 768, y: 172 },
+
+                    { x: 501, y: 492 },
+                    { x: 522, y: 492 },
+
+                ],
+                killing: true,
+            },
+
+            {
+                image: "spikesUp",
+                position: [
+                    { x: 554, y: 492 },
+                ],
+                id: "movingSpikesLab1",
+                killing: true,
+            },
+
+            {
+                position: { x: 410, y: 490 },
+                shape: new Line(0, 0, 0, 0),
+                trigger: startObject("movingSpikesLab1"),
+            },
+
+            {
+                image: "spikeUp",
+                position: [
+                    { x: 609, y: 588 },
+                ],
+                killing: true,
+            },
+
+            {
+                position: [
+                    { x: 384, y: range(378, 500, 32) },
+                ],
+                image: "spikesRight",
                 killing: true,
             },
 
