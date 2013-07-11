@@ -2,17 +2,6 @@
 
 (function()
 {
-
-    function additionalJump(game)
-    {
-        game.canJump = true;
-        game.removeObject(this);
-
-        game.audio.play("Mega_Man_Blast_Sound.ogg");
-    }
-
-
-
     function loadState(game, state)
     {
         if(state === 0xbaffbeff)
@@ -103,6 +92,33 @@
         }
     }
 
+    function moveSpikeLaby1(game)
+    {
+        if(this.forward)
+        {
+            if(this.x > 395)
+            {
+                this.x -= 1;
+            }
+        }
+    }
+
+    function startSpikesLaby2(game)
+    {
+
+    }
+
+    function moveSpikeLaby2(game)
+    {
+        if(this.forward)
+        {
+            if(this.x > 395)
+            {
+                this.x -= 1;
+            }
+        }
+    }
+
     function startObject(id)
     {
         return function(game)
@@ -119,7 +135,7 @@
 
     function tickFunction(game)
     {
-        game.viewportX = Math.max(0, game.posX - 200) * .4 | 0;
+        game.viewportX = Math.min(350, Math.max(0, game.posX - 200) * .4 | 0);
     }
 
     // the spikes in the first part of the game
@@ -176,7 +192,7 @@
 
             game.addDrawHook(function(game)
             {
-                return;
+                //return;
                 var renderer = game.renderer,
                     x = game.posX + game.level.characterWidth / 2 - game.viewportX | 0,
                     y = game.posY + game.level.characterHeight / 2 - game.viewportY | 0;
@@ -260,10 +276,10 @@
 
             "charHitmap": "char_hitmap.png",
 
-            "spikeUp": "161.png",
-            "spikeLeft": "163.png",
-            "spikeRight": "162.png",
-            "spikeDown": "164.png",
+            "spikeUp": "small_spike_up.png",
+            "spikeLeft": "small_spike_left.png",
+            "spikeRight": "small_spike_right.png",
+            "spikeDown": "small_spike_down.png",
 
 
             "jumpOrb": "844.png",
@@ -313,9 +329,7 @@
                     { x: 280, y: range(184, 600, 32) },
                     { x: 352, y: range(184, 568, 32) },
 
-                    { x: 704, y: range(152, 600, 32) },
-                    { x: 768, y: range(184, 536, 32) },
-                    { x: 768, y: 568 },
+                    { x: 704, y: range(184, 600, 32) },
 
                     { x: range(448, 608, 32), y: 536 },
                     { x: 640, y: 536 },
@@ -327,10 +341,24 @@
                     { x: range(416, 692, 32), y: 408 },
 
                     { x: range(384, 660, 32), y: 314 },
-                    { x: range(384, 660, 32), y: 346 },
+                    { x: range(384, 448, 32), y: 346 },
+                    { x: range(512, 576, 32), y: 346 },
+                    { x: 640, y: 346 },
 
                     { x: range(416, 692, 32), y: 250 },
                     { x: range(384, 660, 32), y: 184 },
+
+                    { x: 768, y: range(184, 280, 32) },
+
+                    { x: 768, y: 568 },
+
+                    { x: range(800, 1200, 32), y: 248 },
+
+                    { x: range(768, 1088, 32), y: [344, 376] },
+                    { x: range(768, 1000, 32), y: [472, 504] },
+
+                    { x: 1024, y: range(472, 600, 32) },
+                    { x: 1088, y: range(344, 600, 32) },
 
                 ]
             },
@@ -342,14 +370,31 @@
             },
 
             {
+                image: "yellowGradientTop",
+                position: { x: 1120, y: 568 },
+            },
+
+            {
+                shape: new Line(0, 0, 0, 350),
+                position: { x: 1150, y: 250 },
+                blocking: true,
+            },
+
+            {
                 image: "spikesUp",
                 position: [
                     { x: 736, y: 587 },
-                    { x: 704, y: 140 },
+                    { x: 704, y: 172 },
                     { x: 768, y: 172 },
 
                     { x: 501, y: 492 },
                     { x: 522, y: 492 },
+
+                    { x: range(1024, 1300, 32), y: 236 },
+
+                    { x: range(800, 1000, 32), y: 588 },
+
+                    { x: 1056, y: 588 },
 
                 ],
                 killing: true,
@@ -360,21 +405,85 @@
                 position: [
                     { x: 554, y: 492 },
                 ],
-                id: "movingSpikesLab1",
+                id: "movingSpikesLaby1",
+                tickFunction: moveSpikeLaby1,
                 killing: true,
+            },
+            {
+                position: { x: 460, y: 490 },
+                shape: new Line(0, 0, 1, 0),
+                trigger: startObject("movingSpikesLaby1"),
             },
 
             {
-                position: { x: 410, y: 490 },
-                shape: new Line(0, 0, 0, 0),
-                trigger: startObject("movingSpikesLab1"),
+                image: "spikesUp",
+                position: [
+                    { x: 464, y: 396 },
+                ],
+                id: "movingSpikesLaby2-1",
+                tickFunction: moveSpikeLaby2,
+                killing: true,
+            },
+            {
+                image: "spikesUp",
+                position: [
+                    { x: 594, y: 396 },
+                ],
+                id: "movingSpikesLaby2-2",
+                tickFunction: moveSpikeLaby2,
+                killing: true,
+            },
+            {
+                position: { x: 460, y: 424 },
+                shape: new Line(0, 0, 1, 0),
+                trigger: startSpikesLaby2,
             },
 
             {
                 image: "spikeUp",
                 position: [
-                    { x: 609, y: 588 },
+                    { x: 619, y: 590 },
                 ],
+                killing: true,
+            },
+            {
+                image: "spikeDown",
+                position: [
+                    { x: 393, y: 215 },
+                ],
+                killing: true,
+            },
+            {
+                image: "spikeLeft",
+                position: [
+                    { x: 406, y: 264 },
+                ],
+                killing: true,
+            },
+
+            {
+                image: "spikeUp",
+                position: [
+                    { x: 619, y: 238 },
+                ],
+                blocking: true,
+            },
+
+
+            {
+                position: [
+                    { x: range(418, 672, 32), y: 279 },
+                ],
+                image: "spikesDown",
+                killing: true,
+            },
+
+            {
+                position: [
+                    { x: 692, y: range(474, 596, 32) },
+                    { x: 692, y: range(282, 404, 32) },
+                ],
+                image: "spikesLeft",
                 killing: true,
             },
 

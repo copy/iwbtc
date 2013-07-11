@@ -13,8 +13,8 @@
         this.spike = game.addObject({
             image: "spikeUp",
             killing: true,
-            posX: this.x,
-            posY: this.y,
+            x: this.x,
+            y: this.y,
             tickFunction: moveHiddenSpike,
             zIndex: -1,
         });
@@ -84,37 +84,89 @@
             {
                 game.moveObjectRight(this, -2);
             }
-            else if(this.timer < 180)
+            else if(this.timer < 185)
             {
-                game.moveObjectDown(this, 
-                        2 * Math.rectangle(85)(this.timer - 95));
+                //game.moveObjectDown(this, 
+                //        2 * Math.rectangle(85)(this.timer - 95));
 
                 game.moveObjectRight(this, 3);
             }
-            else if(this.timer < 300)
+            else if(this.timer < 325)
             {
                 if(this.timer % 2)
                 {
                     game.moveObjectDown(this, -1);
+                    game.moveObjectRight(this, -1);
                 }
             }
-            else if(this.timer < 380)
+            else if(this.timer < 480)
             {
-                game.moveObjectRight(this, -4);
+                game.moveObjectRight(this, -2);
             }
-            else if(this.timer < 400)
+            else if(this.timer < 500)
             {
                 game.moveObjectDown(this, 6);
             }
-            else if(this.timer < 800)
+            else if(this.timer < 600)
             {
                 game.moveObjectDown(this, -1);
                 game.moveObjectRight(this, 
-                        Math.round(4 * Math.triangle(80)(this.timer)));
+                        Math.round(2 * Math.triangle(80)(this.timer)));
             }
+            else if(this.timer < 750)
+            {
+                game.moveObjectRight(this, -1);
+            }
+            else if(this.timer < 790)
+            {
+                game.moveObjectDown(this, -1);
+            }
+            else if(this.timer < 850)
+            {
+
+            }
+            else if(this.timer < 950)
+            {
+                game.moveObjectRight(this, 3);
+            }
+            else if(this.timer < 1000)
+            {
+                game.moveObjectDown(this, -1);
+            }
+            else if(this.timer < 1022)
+            {
+                game.moveObjectRight(this, 4);
+            }
+            else if(this.timer < 1050)
+            {
+
+            }
+            else if(this.timer < 1150)
+            {
+                game.moveObjectDown(this, -1);
+            }
+            else if(this.timer < 1230)
+            {
+                game.moveObjectRight(this, 1);
+            }
+            else if(this.timer < 1300)
+            {
+
+            }
+            else 
+            {
+                game.moveObjectRight(this, -Math.ceil((this.timer - 1300) / 18));
+            }
+
 
             this.timer++;
         }
+    }
+
+    function badPlatform(game)
+    {
+        game.removeObject(this);
+
     }
 
     function transitionUp(game)
@@ -177,7 +229,7 @@
 
         this.timer++;
         
-        if(this.timer > 1000)
+        if(this.timer > 1500)
         {
             game.removeObject(this);
         }
@@ -456,6 +508,7 @@
                     { x: range(352, 800, 32), y: 0 },
 
                     { x: 309, y: 102 },
+
                 ],
             },
 
@@ -471,7 +524,7 @@
                     { x: 736, y: range(416, 1104, 32) },
                     { x: 96, y: 384 },
                     { x: 736, y: range(32, 356, 32) },
-                    { x: 256, y: 248 },
+                    { x: 256, y: 250 },
                     { x: 416, y: 108 },
                     { x: 480, y: 224 },
                     { x: 640, y: 160 },
@@ -481,7 +534,7 @@
                 image: "spikeRight",
                 killing: true,
                 position: [
-                    { x: 288, y: 248 },
+                    { x: 288, y: 250 },
                     { x: 448, y: 108 },
                     { x: 512, y: 224 },
                     { x: 672, y: 160 },
@@ -520,7 +573,17 @@
             },
 
             {
-                //trigger: alert.bind(window, "you win"),
+                image: 3,
+                trigger: badPlatform,
+                dynamic: true,
+
+                position: [ 
+                    { x: 170, y: 168 },
+                    { x: 435, y: 70 },
+                ]
+            },
+
+            {
                 dynamic: true,
                 trigger: redOrb,
                 image: "redOrb",
@@ -530,7 +593,7 @@
             {
                 trigger: startObject("platform1"),
                 shape: new Line(0, 0, 32, 0),
-                position: { x: 700, y: 845 },
+                position: { x: 690, y: 845 },
             },
 
 
@@ -558,7 +621,7 @@
                 id: "platform2",
                 image: "platform2",
                 blocking: true,
-                position: { x: 660, y: 310 },
+                position: { x: 650, y: 330 },
                 tickFunction: movePlatform2,
             },
 
@@ -595,7 +658,7 @@
                 position: [
                     { x: [565, 485, 405, 325], y: 500 },
                     { x: [230, 300], y: 310 },
-                    { x: 340, y: 260 }, // hard mode:  y: 260
+                    { x: 340, y: 275 }, // hard mode:  y: 260
                 ],
             },
 
@@ -628,8 +691,8 @@
             },
                 
             {
-                position: { x: 270, y: -300 },
-                killing: true,
+                position: { x: 319, y: -300 },
+                blocking: true,
                 shape: new Line(0, 0, 0, 300),
             },
 
