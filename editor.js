@@ -24,6 +24,29 @@ function LevelEditor(game)
     this.showInvisibles.addEventListener("change",
             this.setShowInvisibles.bind(this), false);
 
+    var autoreload_box = document.getElementById("autoreload");
+
+    if(location.search.indexOf("reload=1") >= 0)
+    {
+        autoreload_box.checked = true;
+        autoreload_box.onclick = function()
+        {
+            location.search = location.search.replace("reload=1", "");
+        }
+
+        timeout = setTimeout(function()
+        {
+            location.reload();
+        }, 1000);
+    }
+    else
+    {
+        autoreload_box.onclick = function()
+        {
+            location.search += "&reload=1";
+        }
+    }
+
     // debugging help
     window.ge = game;   
 }
