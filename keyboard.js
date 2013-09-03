@@ -38,9 +38,31 @@ function KeyboardManager(game)
 
     var self = this;
 
+    var click_count = 0;
+
     document.getElementById("reset_keys").addEventListener("click",
         function()
         {
+            this.textContent = [
+                "Done.", 
+                "Keys resetted.",
+                "You keep failing at this, huh?", 
+                "undefined", 
+                "Just kidding.", 
+                "Bored?",
+                "BOred?",
+                "BORed?",
+                "BOREd?",
+                "BORED?",
+                "Okay ...",
+                "There once was a girl from Kentucky ..."
+            ][click_count++];
+
+            if(click_count === 12)
+            {
+                location.href = "https://www.youtube.com/watch?v=oHg5SJYRHA0";
+            }
+
             self.resetKeys();
             self.saveSettings();
         }, false);
