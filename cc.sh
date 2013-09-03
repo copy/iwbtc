@@ -1,4 +1,4 @@
-IN="storage.js clone.js engine.js audio.js bitmap.js game_objects.js keyboard.js renderer.js util.js"
+IN="storage.js clone.js engine.js audio.js bitmap.js game_objects.js keyboard.js renderer.js util.js schosm.js"
 OUT="iwbtc-all.js"
 
 ls -l $OUT
