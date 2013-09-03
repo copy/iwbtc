@@ -250,7 +250,7 @@ GameEngine.prototype.restart = function()
     this.direction = RIGHT;
     this.dead = false;
     this.isMoving = false;
-    this.canJump = true;
+    this.canJump = false;
 
     this.vspeed = 0;
 
@@ -266,7 +266,6 @@ GameEngine.prototype.restart = function()
     this.loadObjects();
 
     var gameState = this.storage.getItem(STORAGE_STATE);
-
     if(gameState)
     {
         this.level.loadState(this, gameState);
@@ -310,7 +309,7 @@ GameEngine.prototype.loadObjects = function()
     });
 
 
-    // temp cache for the image to bitmap part
+    // temporary cache for the image to bitmap part
     var cache = {};
 
     objects.forEach(function(object)
@@ -329,6 +328,12 @@ GameEngine.prototype.loadObjects = function()
         {
             return obj.dynamic;
         });
+
+
+    //console.log(objects.find(function(x)
+    //            {
+    //                return x.
+    //console.log(objectsByType)
 
     this.drawableObjects = objectsByType[0];
     //self.objects.sort(function(x, y) { return compare(x.zIndex, y.zIndex); });
@@ -366,6 +371,9 @@ GameEngine.prototype.addObject = function(object, cache)
     {
         image = this.images[object.image];
         dbg_assert(image, "invalid image id");
+
+        width = image.width;
+        height = image.height;
     }
 
     dbg_assert(!object.blocking || !trigger, 
