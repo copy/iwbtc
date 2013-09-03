@@ -192,7 +192,7 @@
 
             game.addDrawHook(function(game)
             {
-                //return;
+                return;
                 var renderer = game.renderer,
                     x = game.posX + game.level.characterWidth / 2 - game.viewportX | 0,
                     y = game.posY + game.level.characterHeight / 2 - game.viewportY | 0;

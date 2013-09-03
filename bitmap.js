@@ -236,6 +236,16 @@ Bitmap.prototype.compareMany = function(bitmaps, sx, sy)
 
     return bitmaps.some(function(obj)
     {
+        if(obj.x > sx + self.width || 
+            obj.y > sy + self.height ||
+            obj.x + obj.bitmap.width < sx ||
+            obj.y + obj.bitmap.height < sy)
+        {
+            // safes us some computations,
+            // since this is often the case
+            return false;
+        }
+
         return self.compare(obj.bitmap, obj.x - sx, obj.y - sy);
     });
 };

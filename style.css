@@ -28,6 +28,7 @@ body {
 .link_like {
     cursor: pointer;
     font-size: small;
+    color: darkred;
 }
 
 .link_like:hover {
@@ -46,3 +47,4 @@ body {
     padding-top: 50px;
     margin-left: 50px;
 }
+

@@ -12,11 +12,11 @@ var NOT_FALLING = 0,
 var GAME_WIDTH = 800,
     GAME_HEIGHT = 600;
 
-var FIRST_LEVEL = "2up.js",
+var FIRST_LEVEL = "level1.js",
     LEVEL_DIR = "levels/";
 
 
-var STORAGE_USE_AUDIO = "use_audio",
+var STORAGE_NO_AUDIO = "no_audio",
     STORAGE_LEVEL = "last_level",
     STORAGE_STATE = "state";
 
@@ -36,7 +36,7 @@ window.addEventListener("load", function()
 /** @constructor */
 function GameEngine()
 {
-    this.version = .01;
+    this.version = .02;
 
     this.width = GAME_WIDTH;
     this.height = GAME_HEIGHT;
@@ -51,7 +51,7 @@ function GameEngine()
     this.keyboard = new KeyboardManager(this);
     this.renderer = new GameRenderer(this);
 
-    this.audio = new AudioManager(!!this.storage.getItem(STORAGE_USE_AUDIO));
+    this.audio = new AudioManager(!this.storage.getItem(STORAGE_NO_AUDIO));
 
     if(!this.audio.works)
     {
@@ -104,6 +104,12 @@ function GameEngine()
 
     var self = this;
     
+    document.getElementById("mute_button").addEventListener("click", 
+        function()
+        {
+            self.toggleMute();
+        }, false);
+
     document.getElementById("reset_save").addEventListener("click", 
         function()
         {
@@ -218,10 +224,13 @@ GameEngine.prototype.start = function()
 
     this.dead = false;
 
+    this.audio.play(this.level.backgroundMusic, true, true);
+
     // everything else is initialized there:
     this.restart();
 
     this.running = true;
+
 
     if(this.tickFunctionStopped)
     {
@@ -245,7 +254,7 @@ GameEngine.prototype.restart = function()
 
     this.vspeed = 0;
 
-    this.audio.play(this.level.backgroundMusic, true, true);
+    //this.audio.setMuteSingle(this.level.backgroundMusic, false);
     this.audio.stop(this.level.deathMusic);
 
     this.tickCount = 0;
@@ -300,9 +309,13 @@ GameEngine.prototype.loadObjects = function()
         });
     });
 
+
+    // temp cache for the image to bitmap part
+    var cache = {};
+
     objects.forEach(function(object)
     {
-        var obj = self.addObject(object);
+        var obj = self.addObject(object, cache);
 
         if(obj.init)
         {
@@ -324,7 +337,7 @@ GameEngine.prototype.loadObjects = function()
     this.renderer.loadForeground([]);
 };
 
-GameEngine.prototype.addObject = function(object)
+GameEngine.prototype.addObject = function(object, cache)
 {
     var 
         isDynamic = object.dynamic || !!object.id,
@@ -341,6 +354,8 @@ GameEngine.prototype.addObject = function(object)
             "init",
         ];
 
+    cache = cache || {};
+
     if(Object.keys(object).deleteList(knownProperties).length)
     {
         console.log(Object.keys(object).deleteList(knownProperties));
@@ -351,11 +366,6 @@ GameEngine.prototype.addObject = function(object)
     {
         image = this.images[object.image];
         dbg_assert(image, "invalid image id");
-
-        if(shape === undefined)
-        {
-            shape = new AutoShape(image);
-        }
     }
 
     dbg_assert(!object.blocking || !trigger, 
@@ -366,6 +376,20 @@ GameEngine.prototype.addObject = function(object)
         dbg_assert(!trigger, "an object cannot kill and have a trigger at the same time");
         dbg_assert(!object.blocking, "an object cannot kill and block at the same time");
         trigger = this.die.bind(this);
+    }
+
+    if(shape === undefined && image && (trigger || object.blocking || isDynamic))
+    {
+        // if the object has an image, but no specific shape and 
+        // might need a shape, generate it now from the image
+        if(cache[object.image])
+        {
+            shape = cache[object.image];
+        }
+        else
+        {
+            cache[object.image] = shape = new AutoShape(image);
+        }
     }
 
     if(shape)
@@ -451,11 +475,11 @@ GameEngine.prototype.toggleMute = function()
 
     if(this.audio.muted)
     {
-        this.storage.removeItem(STORAGE_USE_AUDIO);
+        this.storage.setItem(STORAGE_NO_AUDIO, 1);
     }
     else
     {
-        this.storage.setItem(STORAGE_USE_AUDIO, 1);
+        this.storage.removeItem(STORAGE_NO_AUDIO);
     }
 };
 
@@ -464,8 +488,9 @@ GameEngine.prototype.die = function()
 {
     if(!this.dead)
     {
-        this.audio.stop(this.level.backgroundMusic);
-        this.audio.play(this.level.deathMusic, false, true);
+        // Should the music be muted or paused when the death sound is running?
+        //this.audio.setMuteSingle(this.level.backgroundMusic, true);
+        this.audio.play(this.level.deathMusic, false, true, .3);
         this.dead = true;
     }
 };
@@ -477,9 +502,6 @@ GameEngine.prototype.crush = function()
     console.log("death by crushing"); 
     this.die();
 };
-
-
-
 
 
 
@@ -506,26 +528,28 @@ GameEngine.prototype.doTick = function doTick(self)
     {
         // caused by going to another tab, screensavers, etc.
         // just skip game logic
-        console.log("logic skip");
+        //console.log("logic skip");
         self.totalDelta = 0;
     }
 
+    //var t = Date.now();
     while(self.totalDelta >= level.physics.timePerTick)
     {
-        //var t = Date.now();
         self.tick(self);
-        //if(Date.now() - t > 10) console.log(Date.now() - t);
         self.totalDelta -= level.physics.timePerTick;
     }
+    //if(Date.now() - t > 5) console.log(Date.now() - t);
     //console.timeEnd(1);
 
 
+    //var t = Date.now();
     self.renderer.redraw();
 
     self.drawHooks.forEach(function(f)
     {
         f.call(self.level, self);
     });
+    //if(Date.now() - t > 10) console.log(Date.now() - t);
 
     requestAnimationFrame(function() { doTick(self); });
 };
@@ -539,11 +563,15 @@ GameEngine.prototype.tick = function(self)
     // TODO: tickFunction.call(something, self);
     self.level.tickFunction(self);
 
+    self.objects.forEach(doTick);
 
-    self.triggeringObjects.forEach(testObjectTrigger);
-
-    function testObjectTrigger(obj)
+    function doTick(obj)
     {
+        if(obj.tickFunction)
+        {
+            obj.tickFunction.call(obj, self);
+        }
+
         if(obj.bitmap && obj.trigger)
         {
             var hit = self.characterCollision(obj.bitmap, obj.x, obj.y);
@@ -554,16 +582,6 @@ GameEngine.prototype.tick = function(self)
             }
 
             obj.triggered = hit;
-        }
-    }
-
-    self.objects.forEach(doTick);
-
-    function doTick(obj)
-    {
-        if(obj.tickFunction)
-        {
-            obj.tickFunction.call(obj, self);
         }
     }
 
@@ -704,18 +722,23 @@ GameEngine.prototype.addDrawHook = function(f)
 // returns true if character has been blocked by something
 GameEngine.prototype.moveCharacterRight = function(x)
 {
-    if(x === 0)
+    // Note: This will fail for large movements 
+    // (|x| > size of the char), but makes it much faster. 
+    // Large movements could be considered teleportation anyways
+    if(!this.charBitmap.compareMany(this.blockingObjects, this.posX + x, this.posY))
     {
+        this.posX += x;
         return false;
     }
 
-    var dx = Math.sign(x),
-        bitmap = this.charBitmap.slice(0, 0, 1, this.level.characterHeight),
-        bitmapPosX = this.posX + (x < 0 ? x : 0),
-        bitmapPosY = this.posY;
+    // The character collided, find the collision point
+    // using a safe approach
+    var dx = Math.sign(x);
 
     while(x)
     {
+        // We could safe us one comparison here, because it
+        // has already been done above
         this.posX += dx;
         x -= dx;
 
@@ -731,18 +754,16 @@ GameEngine.prototype.moveCharacterRight = function(x)
     return false;
 };
 
+// same as the above function
 GameEngine.prototype.moveCharacterDown = function(y)
 {
-    if(y === 0)
+    if(!this.charBitmap.compareMany(this.blockingObjects, this.posX, this.posY + y))
     {
+        this.posY += y;
         return false;
     }
 
-    var dy = Math.sign(y),
-        //bitmap = new Bitmap(this.level.characterWidth, this.level.characterHeight + Math.abs(y)),
-        bitmapPosX = this.posX,
-        offset = y < 0 ? -1 : this.level.characterHeight;
-
+    var dy = Math.sign(y);
 
     while(y)
     {
@@ -762,6 +783,15 @@ GameEngine.prototype.moveCharacterDown = function(y)
 
 GameEngine.prototype.characterCollision = function(bitmap, bx, by)
 {
+    if(bx > this.posX + this.level.characterWidth || 
+        by > this.posY + this.level.characterHeight ||
+        bx + bitmap.width < this.posX ||
+        by + bitmap.height < this.posY)
+    {
+        // not necessary, but avoids a bunch of  calculations
+        return false;
+    }
+
     return this.charBitmap.compare(bitmap, Math.round(bx - this.posX), Math.round(by - this.posY));
 };
 

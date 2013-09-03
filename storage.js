@@ -14,7 +14,7 @@ function GameStorage(gameVersion)
 
             if(!localStorage.getItem("version"))
             {
-                throw "bomb";
+                throw "grenade";
             }
         }
     }
@@ -67,6 +67,7 @@ GameStorage.prototype.getItem = function(key)
 {
     if(this.works)
     {
+        // returns null if key is not defined
         return JSON.parse(localStorage.getItem(key));
     }
     else

@@ -167,6 +167,45 @@ Function.byIndex = function(index, value)
     };
 }
 
+// not well tested, works for everything that we need
+Object.deepcopy = function clone(obj)
+{
+    if(typeof obj === "object")
+    {
+        if(obj instanceof Array)
+        {
+            return obj.map(clone);
+        }
+        else if(obj.__proto__)
+        {
+            var result = {
+                __proto__: obj.__proto__
+            },
+            keys = Object.keys(obj);
+
+            for(var i = 0; i < keys.length; i++)
+            {
+                result[keys[i]] = obj[keys[i]];
+            }
+        }
+        else
+        {
+            var result = {};
+
+            for(var k in obj)
+            {
+                result[k] = clone(obj[k]);
+            }
+        }
+
+        return result;
+    }
+    else
+    {
+        return obj;
+    }
+};
+
 Object.isArray = function(x)
 {
     return x instanceof Array;

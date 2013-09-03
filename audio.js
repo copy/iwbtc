@@ -178,6 +178,34 @@ AudioManager.prototype.stop = function(file)
     }
 };
 
+AudioManager.prototype.toggleMuteSingle = function(file)
+{
+    if(!this.works)
+    {
+        return;
+    }
+
+    //var song = Array.find(this.playing
+
+    if(!this.muted)
+    {
+        var self = this;
+
+        this.playQueue.forEach(function(args)
+        {
+            args[1][4] = (Date.now() - args[0]) / 1000;
+            self.play.apply(self, args[1]);
+        });
+
+        this.playQueue = [];
+    }
+
+    function setMute(audioObj)
+    {
+        audioObj.audio.muted = muted;
+    }
+};
+
 AudioManager.prototype.toggleMute = function()
 {
     if(this.works)
