@@ -37,7 +37,7 @@ function LevelEditor(game)
         timeout = setTimeout(function()
         {
             location.reload();
-        }, 1000);
+        }, 2000);
     }
     else
     {

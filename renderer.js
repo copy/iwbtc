@@ -36,20 +36,20 @@ function GameRenderer(game)
 GameRenderer.prototype.loadBackground = function(images)
 {
     this.backgroundCanvas = this.imagesToCanvas(
-            images, 
-            this.game.level.width,
-            this.game.level.height,
-            this.game.level.backgroundColor
-            );
+        images, 
+        this.game.level.width,
+        this.game.level.height,
+        this.game.level.backgroundColor
+    );
 };
 
 GameRenderer.prototype.loadForeground = function(images)
 {
     this.foregroundCanvas = this.imagesToCanvas(
-            images, 
-            this.game.level.width,
-            this.game.level.height
-            );
+        images, 
+        this.game.level.width,
+        this.game.level.height
+    );
 };
 
 
@@ -197,7 +197,6 @@ GameRenderer.prototype.redraw = function()
 
 
     //document.getElementById("fps").textContent = Math.round(1000 / delta) + "fps";
-
 };
 
 GameRenderer.prototype.drawLoadingScreen = function(filesLoaded, fileCount)

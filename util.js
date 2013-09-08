@@ -25,7 +25,8 @@ Math.triangle = function(a)
 {
     return function(t)
     {
-        return -1 + 4 * Math.abs(t/a + .25 - Math.floor(t/a + .75));
+        var r = t / a;
+        return -1 + 4 * Math.abs(r + .25 - Math.floor(r + .75));
     }
 };
 
