@@ -23,6 +23,13 @@
         game.removeObject(this);
     }
 
+
+    function saveState2(game)
+    {
+        game.saveState(0xf0f0b33f);
+        game.removeObject(this);
+    }
+
     function movePlatform(game)
     {
         if(this.backward)
@@ -98,25 +105,14 @@
         {
             if(this.x > 395)
             {
-                this.x -= 1;
+                this.x -= 2;
             }
         }
-    }
-
-    function startSpikesLaby2(game)
-    {
-
     }
 
     function moveSpikeLaby2(game)
     {
-        if(this.forward)
-        {
-            if(this.x > 395)
-            {
-                this.x -= 1;
-            }
-        }
+        this.x -= Math.rectangle(150)(game.tickCount);
     }
 
     function startObject(id)
@@ -340,10 +336,10 @@
 
                     { x: range(416, 692, 32), y: 408 },
 
-                    { x: range(384, 660, 32), y: 314 },
+                    { x: range(384, 672, 32), y: 314 },
+                    { x: range(384, 576, 32), y: 314 },
                     { x: range(384, 448, 32), y: 346 },
-                    { x: range(512, 576, 32), y: 346 },
-                    { x: 640, y: 346 },
+                    { x: range(576, 672, 32), y: 346 },
 
                     { x: range(416, 692, 32), y: 250 },
                     { x: range(384, 660, 32), y: 184 },
@@ -418,31 +414,17 @@
             {
                 image: "spikesUp",
                 position: [
-                    { x: 464, y: 396 },
+                    { x: 524, y: 396 },
                 ],
                 id: "movingSpikesLaby2-1",
                 tickFunction: moveSpikeLaby2,
                 killing: true,
             },
-            {
-                image: "spikesUp",
-                position: [
-                    { x: 594, y: 396 },
-                ],
-                id: "movingSpikesLaby2-2",
-                tickFunction: moveSpikeLaby2,
-                killing: true,
-            },
-            {
-                position: { x: 460, y: 424 },
-                shape: new Line(0, 0, 1, 0),
-                trigger: startSpikesLaby2,
-            },
 
             {
                 image: "spikeUp",
                 position: [
-                    { x: 619, y: 590 },
+                    { x: 621, y: 591 },
                 ],
                 killing: true,
             },
@@ -515,6 +497,16 @@
                 trigger: saveState1,
             },
 
+
+            {
+                id: "saveState2",
+                position: { x: 406, y: 550 },
+                image: "blueOrb",
+                trigger: saveState1,
+            },
+
+
+            // platform
             {
                 id: "movingPlatform",
                 position: { x: 140, y: 430 },
@@ -522,13 +514,12 @@
                 tickFunction: movePlatform,
                 blocking: true,
             },
-
             {
                 position: [
-                    { x: 140, y: 599 },
-                    //{ x: 140, y: 290 },
+                    { x: 100, y: 599 },
+                    { x: 150, y: 599 },
                 ],
-                shape: new Line(0, 0, 32, 0),
+                shape: new Line(0, 0, 1, 0),
                 trigger: startObject("movingPlatform"),
             },
 
@@ -557,6 +548,7 @@
             new MovingSpike(270, 504, 450, 130, -3),
 
 
+            // spikes on the right
             {
                 position: [
                     { x: 32, y: 184 },
@@ -574,9 +566,9 @@
             new MovingSpike(32, 280, 330, 140, 2),
             new MovingSpike(32, 312, 330, 170, 1),
             new MovingSpike(32, 344, 370, 70,  2),
-            new MovingSpike(32, 376, 340, 130, 2),
-            new MovingSpike(32, 408, 400, 90,  5),
-            new MovingSpike(32, 472, 450, 130, 3),
+            //new MovingSpike(32, 376, 340, 130, 2),
+            //new MovingSpike(32, 408, 400, 90,  5),
+            //new MovingSpike(32, 472, 450, 130, 3),
 
             // tunnel
             {
@@ -597,7 +589,7 @@
                 killing: true,
             },
             {
-                position: { x: 400, y: 588 },
+                position: { x: 402, y: 588 },
                 image: "spikesUp",
                 killing: true,
             },
