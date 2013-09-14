@@ -35,16 +35,17 @@ body {
     color: green;
 }
 
+#keys td {
+    padding: 3px 15px;
+}
+
 #keys {
-    min-height: 110px;
     margin-left: 50px;
     margin-top: 10px;
 }
 
-
 #press_key_msg {
-    height: 70px;
-    padding-top: 50px;
+    height: 40px;
     margin-left: 50px;
 }
 

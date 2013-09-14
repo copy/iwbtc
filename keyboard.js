@@ -50,15 +50,11 @@ function KeyboardManager(game)
                 "undefined", 
                 "Just kidding.", 
                 "Bored?",
-                "BOred?",
-                "BORed?",
-                "BOREd?",
-                "BORED?",
                 "Okay ...",
                 "There once was a girl from Kentucky ..."
             ][click_count++];
 
-            if(click_count === 12)
+            if(click_count === 8)
             {
                 location.href = "https://www.youtube.com/watch?v=oHg5SJYRHA0";
             }

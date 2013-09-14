@@ -6,7 +6,9 @@
 
         if(code == 0x4c1aa27a8229)
         {
-            ge.nextLevel("2up.js");
+            localStorage.last_level = '"2up.js"';
+            localStorage.removeItem("state");
+            location.reload();
         }
-    });
+    }, false);
 }();

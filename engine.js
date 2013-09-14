@@ -1,21 +1,28 @@
 "use strict";
 
+/** @define */
+var DEBUG = true;
 
+/** @const */
 var RIGHT = 0,
     LEFT = 1;
     
+/** @const */
 var NOT_FALLING = 0,
     IN_JUMP = 1,
     FALLING = 2;
 
 
+/** @const */
 var GAME_WIDTH = 800,
     GAME_HEIGHT = 600;
 
+/** @const */
 var FIRST_LEVEL = "level1.js",
     LEVEL_DIR = "levels/";
 
 
+/** @const */
 var STORAGE_NO_AUDIO = "no_audio",
     STORAGE_LEVEL = "last_level",
     STORAGE_STATE = "state";
@@ -25,7 +32,7 @@ window.addEventListener("load", function()
 { 
     var ge = new GameEngine; 
 
-    if(location.host === "localhost" && window.LevelEditor)
+    if(DEBUG && location.host === "localhost" && window.LevelEditor)
     {
         new LevelEditor(ge);
     }
@@ -113,9 +120,7 @@ function GameEngine()
     document.getElementById("reset_save").addEventListener("click", 
         function()
         {
-            self.levelFile = FIRST_LEVEL;
-            self.storage.removeItem(STORAGE_STATE);
-            self.loadLevel(FIRST_LEVEL);
+            self.nextLevel(FIRST_LEVEL);
         }, false);
 
 
